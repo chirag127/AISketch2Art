@@ -1,0 +1,46 @@
+# FILE: badges.yml
+# DESCRIPTION: Centralized configuration for Shields.io badges, ensuring consistency across documentation.
+# ARCHITECT: Apex Technical Authority (December 2025 Standard)
+
+meta:
+  username: chirag127
+  repo: AISketch-To-Art-AI-Image-Generator-Web-App
+  style: flat-square
+
+badges:
+  - name: ci_status
+    description: GitHub Actions CI/CD Build Status
+    image_url: "https://img.shields.io/github/actions/workflow/status/chirag127/AISketch-To-Art-AI-Image-Generator-Web-App/ci.yml?branch=main&label=CI/CD&style=flat-square&logo=githubactions"
+    link_url: "https://github.com/chirag127/AISketch-To-Art-AI-Image-Generator-Web-App/actions/workflows/ci.yml"
+    markdown: "[![CI/CD Status](https://img.shields.io/github/actions/workflow/status/chirag127/AISketch-To-Art-AI-Image-Generator-Web-App/ci.yml?branch=main&label=CI/CD&style=flat-square&logo=githubactions)](https://github.com/chirag127/AISketch-To-Art-AI-Image-Generator-Web-App/actions/workflows/ci.yml)"
+
+  - name: code_coverage
+    description: Code Coverage Percentage via Codecov
+    # NOTE: Placeholder token is used, replace CODECOV_TOKEN_PLACEHOLDER with actual token post-integration.
+    image_url: "https://img.shields.io/codecov/c/github/chirag127/AISketch-To-Art-AI-Image-Generator-Web-App/main?style=flat-square&token=CODECOV_TOKEN_PLACEHOLDER&logo=codecov"
+    link_url: "https://codecov.io/gh/chirag127/AISketch-To-Art-AI-Image-Generator-Web-App"
+    markdown: "[![Code Coverage](https://img.shields.io/codecov/c/github/chirag127/AISketch-To-Art-AI-Image-Generator-Web-App/main?style=flat-square&token=CODECOV_TOKEN_PLACEHOLDER&logo=codecov)](https://codecov.io/gh/chirag127/AISketch-To-Art-AI-Image-Generator-Web-App)"
+
+  - name: tech_stack
+    description: Primary Technology Stack (TypeScript, React, Vite)
+    image_url: "https://img.shields.io/badge/Stack-TS%20%7C%20React%20%7C%20Vite-blueviolet?style=flat-square&logo=react&logoColor=white"
+    link_url: "#architectural-standards"
+    markdown: "[![Tech Stack](https://img.shields.io/badge/Stack-TS%20%7C%20React%20%7C%20Vite-blueviolet?style=flat-square&logo=react&logoColor=white)](#architectural-standards)"
+    
+  - name: linter
+    description: Code Linter and Formatter (Biome)
+    image_url: "https://img.shields.io/badge/Code%20Quality-Biome%20(Fast)-F5C71D?style=flat-square&logo=biome&logoColor=black"
+    link_url: "https://biomejs.dev/"
+    markdown: "[![Linter](https://img.shields.io/badge/Code%20Quality-Biome%20(Fast)-F5C71D?style=flat-square&logo=biome&logoColor=black)](https://biomejs.dev/)"
+
+  - name: license
+    description: Repository License (CC BY-NC 4.0)
+    image_url: "https://img.shields.io/github/license/chirag127/AISketch-To-Art-AI-Image-Generator-Web-App?color=brightgreen&style=flat-square"
+    link_url: "https://github.com/chirag127/AISketch-To-Art-AI-Image-Generator-Web-App/blob/main/LICENSE"
+    markdown: "[![License](https://img.shields.io/github/license/chirag127/AISketch-To-Art-AI-Image-Generator-Web-App?color=brightgreen&style=flat-square)](https://github.com/chirag127/AISketch-To-Art-AI-Image-Generator-Web-App/blob/main/LICENSE)"
+
+  - name: stars
+    description: GitHub Stars Count
+    image_url: "https://img.shields.io/github/stars/chirag127/AISketch-To-Art-AI-Image-Generator-Web-App?style=flat-square&label=Stars&logo=github&color=yellow"
+    link_url: "https://github.com/chirag127/AISketch-To-Art-AI-Image-Generator-Web-App/stargazers"
+    markdown: "[![GitHub Stars](https://img.shields.io/github/stars/chirag127/AISketch-To-Art-AI-Image-Generator-Web-App?style=flat-square&label=Stars&logo=github&color=yellow)](https://github.com/chirag127/AISketch-To-Art-AI-Image-Generator-Web-App/stargazers)"
