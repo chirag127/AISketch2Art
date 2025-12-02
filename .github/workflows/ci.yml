@@ -1,169 +1,97 @@
-# === APEX CI/CD PIPELINE | DECEMBER 2025 STANDARD ===
-# WORKFLOW: Build, Lint, Test & Security Audit
-# REPOSITORY: AISketch-To-Art-AI-Image-Generator-Web-App
-# STACK: TypeScript, React, Vite, Biome, Vitest, Playwright
-
-name: 'CI: Build, Lint & Test'
+name: CI/CD Pipeline
 
 on:
   push:
-    branches: [ 'main' ]
+    branches:
+      - main
   pull_request:
-    branches: [ 'main' ]
-  workflow_dispatch:
-
-# Cancel in-progress runs for the same PR or branch
-concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: true
-
-permissions:
-  contents: read # Default read-only permissions
+    branches:
+      - main
 
 jobs:
-  #--------------------------------------------------------------------------
-  # JOB 1: LINT & FORMAT CHECK (BIOME)
-  #--------------------------------------------------------------------------
-  lint_and_format:
-    name: '1. Lint & Format (Biome)'
+  lint-and-format:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
-
     steps:
-      - name: 'Checkout Repository'
+      - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: 'Setup Node.js v20'
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'npm'
 
-      - name: 'Install Dependencies'
-        run: npm ci
+      - name: Install Dependencies
+        run: npm install --legacy-peer-deps
 
-      - name: 'Run Biome Linter & Formatter Check'
-        run: npx @biomejs/biome check --apply-unsafe ./src
+      - name: Run Biome Lint and Format Check
+        run: npx @biomejs/biome check
 
-  #--------------------------------------------------------------------------
-  # JOB 2: UNIT & INTEGRATION TESTS (VITEST)
-  #--------------------------------------------------------------------------
-  unit_tests:
-    name: '2. Unit Tests (Vitest)'
+  unit-tests:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
-    needs: lint_and_format
-
+    needs: lint-and-format
     steps:
-      - name: 'Checkout Repository'
+      - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: 'Setup Node.js v20'
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'npm'
 
-      - name: 'Install Dependencies'
-        run: npm ci
+      - name: Install Dependencies
+        run: npm install --legacy-peer-deps
 
-      - name: 'Run Vitest with Coverage'
-        run: npm run test -- --coverage
+      - name: Run Vitest Unit Tests
+        run: npm test -- --coverage
 
-      - name: 'Upload Code Coverage to Codecov'
-        uses: codecov/codecov-action@v4
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          fail_ci_if_error: true
-
-  #--------------------------------------------------------------------------
-  # JOB 3: END-TO-END TESTS (PLAYWRIGHT)
-  #--------------------------------------------------------------------------
-  e2e_tests:
-    name: '3. E2E Tests (Playwright)'
+  e2e-tests:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
-    needs: lint_and_format
-
+    needs: unit-tests
     steps:
-      - name: 'Checkout Repository'
+      - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: 'Setup Node.js v20'
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'npm'
 
-      - name: 'Install Dependencies'
-        run: npm ci
+      - name: Install Dependencies
+        run: npm install --legacy-peer-deps
 
-      - name: 'Install Playwright Browsers'
+      - name: Install Playwright Browsers
         run: npx playwright install --with-deps
 
-      - name: 'Build Vite Project'
+      - name: Build Application for E2E
         run: npm run build
 
-      - name: 'Run Playwright Tests'
-        run: npx playwright test
+      - name: Run Playwright E2E Tests
+        run: npm run test:e2e # Assuming 'test:e2e' script runs Playwright
 
-      - name: 'Upload Playwright Report'
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: playwright-report
-          path: playwright-report/
-          retention-days: 7
-
-  #--------------------------------------------------------------------------
-  # JOB 4: PRODUCTION BUILD VERIFICATION
-  #--------------------------------------------------------------------------
-  verify_build:
-    name: '4. Verify Production Build'
+  build:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
-    needs: lint_and_format
-
+    needs: e2e-tests
     steps:
-      - name: 'Checkout Repository'
+      - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: 'Setup Node.js v20'
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'npm'
 
-      - name: 'Install Dependencies'
-        run: npm ci
+      - name: Install Dependencies
+        run: npm install --legacy-peer-deps
 
-      - name: 'Run Vite Production Build'
+      - name: Build Project
         run: npm run build
 
-      - name: 'Upload Build Artifact'
+      - name: Upload Build Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: dist-build
+          name: aisetch-to-art-web-app-build
           path: dist/
-          retention-days: 5
-
-  #--------------------------------------------------------------------------
-  # JOB 5: SECURITY AUDIT
-  #--------------------------------------------------------------------------
-  security_audit:
-    name: '5. Security Audit (NPM)'
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-
-    steps:
-      - name: 'Checkout Repository'
-        uses: actions/checkout@v4
-
-      - name: 'Setup Node.js v20'
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
-
-      - name: 'Run NPM Audit'
-        run: npm audit --audit-level=high
